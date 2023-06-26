@@ -1,17 +1,26 @@
 #!/bin/bash
 
-DOT_SSH=/tmp/dot.ssh
+DOT_SSH=${HOME}/.ssh
 
-read -p "GitHub ID: " GITHUB_ID && echo
+if [ -f "${DOT_SSH}/authorized_keys" ]; then
+    echo "Error: ${DOT_SSH}/authorized_keys exists"
+    exit 127
+fi
+
+read -p "GitHub ID: " GITHUB_ID
 
 mkdir -p ${DOT_SSH}
-wget https://github.com/${GITHUB_ID}.keys -O ${DOT_SSH}/authorized_keys
-cat > ${DOT_SSH}/config << EOF
+chmod 755 ${DOT_SSH}
+curl "https://github.com/${GITHUB_ID}.keys" > "${DOT_SSH}/authorized_keys"
+chmod 644 ${DOT_SSH}/authorized_keys
+
+if [ -f "${DOT_SSH}/config" ]; then :; else
+    cat > "${DOT_SSH}/config" << EOF
 Host *github.com
   User ${GITHUB_ID}
   ForwardX11 no
   ForwardX11Trusted no
   StrictHostKeyChecking no
 EOF
-chmod 755 ${DOT_SSH}
-chmod 644 ${DOT_SSH}/authorized_keys ${DOT_SSH}/config
+    chmod 644 "${DOT_SSH}/config"
+fi
