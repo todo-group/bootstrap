@@ -1,8 +1,6 @@
 #!/bin/bash
 
 read -r -p "Username: " USERNAME
-read -r -p "GitHub ID: " GITHUB_ID
-
 test -n "$USERNAME" || { echo "Error: Invalid username. Exit."; exit 127; }
 
 NEW_HOME=/home-local/${USERNAME}
@@ -13,7 +11,10 @@ test "$ID_EXISTS" = 1 || { echo "Error: user $USERNAME exists. Exit."; exit 127;
 
 # create user
 useradd -d "$NEW_HOME" -m -s /bin/bash -U "$USERNAME"
+passwd "$USERNAME"
+usermod -aG sudo "$USERNAME"
 
+read -r -p "GitHub ID: " GITHUB_ID
 test -n "$GITHUB_ID" || { echo "Info: skipping SSH key installation"; exit 0; }
 
 # setup ssh keys
