@@ -1,5 +1,8 @@
 #!/bin/bash
 
+[ -n "$SUDO_USER" ] || { echo "Error: Not running with sudo. Exit."; exit 127; }
+[ -n "$BASH_VERSION" ] || { echo "Info: Not running in bash. Re-executing with bash..."; exec bash "$0" "$@"; }
+
 read -r -p "Username: " USERNAME
 test -n "$USERNAME" || { echo "Error: Invalid username. Exit."; exit 127; }
 
