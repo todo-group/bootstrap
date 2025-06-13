@@ -1,6 +1,6 @@
 # bootstrap
 
 ```
-$ wget https://github.com/todo-group/bootstrap/raw/main/bootstrap.sh
-$ /bin/bash bootstrap.sh
+$ wget https://raw.githubusercontent.com/todo-group/bootstrap/main/bootstrap.sh
+$ sudo bash bootstrap.sh
 ```
