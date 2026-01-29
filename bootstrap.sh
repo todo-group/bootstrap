@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -n "$SUDO_USER" ] || { echo "Error: Not running with sudo. Exit."; exit 127; }
+[ "$USER" = "root" ] || { echo "Error: Not running as root. Exit."; exit 127; }
 [ -n "$BASH_VERSION" ] || { echo "Info: Not running in bash. Re-executing with bash..."; exec bash "$0" "$@"; }
 
 read -r -p "Username: " USERNAME
@@ -14,8 +14,8 @@ if test "$ID_EXISTS" = 0; then
 else 
   read -r -p "Home Directory: 1) /home/${USERNAME}, 2) /admin/${USERNAME}: " HOME_CHOICE
   case "$HOME_CHOICE" in
-    1) NEW_HOME="/home/${USERNAME}"; SET_SUDO=1 ;;
-    2) NEW_HOME="/admin/${USERNAME}"; SET_SUDO=0 ;;
+    1) NEW_HOME="/home/${USERNAME}"; SET_SUDO=0 ;;
+    2) NEW_HOME="/admin/${USERNAME}"; SET_SUDO=1 ;;
     *) echo "Error: Invalid choice. Exit."; exit 127 ;;
   esac
   test ! -d "$NEW_HOME" || { echo "Error: $NEW_HOME exists. Exit."; exit 127; }
